@@ -1,0 +1,59 @@
+name: tg-notification
+
+on:
+  push:
+    branches: [ 'main' ]
+  pull_request:
+    branches: [ 'main' ]
+
+defaults:
+  run:
+    # shell default shell to bash for all OS
+    shell: bash
+
+jobs:
+  tg-notify:
+    name: tg-notify
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        #os: [ ubuntu-latest, macos-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: pr-open-notification
+        if: ${{ github.event_name == 'pull_request' && github.event.action == 'opened' }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TG_DEV_GROUP_ID }}
+          token: ${{ secrets.TG_BOT_TOKEN }}
+          format: markdown
+          disable_web_page_preview: true
+          message: |
+            *PR Opened*
+            Repo: [gw3-sdk-python](https://github.com/photon-storage/gw3-sdk-python)
+            Commit: [${{ github.event.pull_request.head.sha }}](${{ github.event.pull_request.html_url }})
+            Author: [${{ github.event.pull_request.user.login }}](${{ github.event.pull_request.user.html_url }})
+            Message: ```text
+            ${{ github.event.pull_request.title }}
+            ```
+            Date: ${{ github.event.pull_request.updated_at }}
+            Changes: ${{ github.event.pull_request.changed_files }} files (+${{ github.event.pull_request.additions }}/-${{ github.event.pull_request.deletions }})
+
+      - name: pr-push-notification
+        if: ${{ github.event_name == 'push' }}
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TG_DEV_GROUP_ID }}
+          token: ${{ secrets.TG_BOT_TOKEN }}
+          format: markdown
+          disable_web_page_preview: true
+          message: |
+            *PR Merged*
+            Repo: [gw3-sdk-python](https://github.com/photon-storage/gw3-sdk-python)
+            Commit: [${{ github.event.after }}](${{ github.event.head_commit.url }})
+            Author: ${{ github.event.head_commit.author.username }}
+            Message: ```text
+            ${{ github.event.head_commit.message }}
+            ```
+            Date: ${{ github.event.head_commit.timestamp }}
+            Pusher: ${{ github.event.pusher.name }}
