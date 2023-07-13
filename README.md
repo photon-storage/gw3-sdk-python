@@ -25,9 +25,9 @@ pip install gw3
 Here's a simple example demonstrating the usage of the Gateway3 IPFS Gateway SDK:
 
 ```python
-from gw3 import GW3Client
+import gw3
 
-client = GW3Client(
+client = gw3.GW3Client(
     "YOUR-ACCESS-KEY",
     "YOUR-ACCESS-SECRET",
 )
