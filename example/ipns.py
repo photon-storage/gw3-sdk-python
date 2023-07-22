@@ -19,3 +19,12 @@ print(f"IPNS is: {ipns}")
 new_cid = "QmNYERzV2LfD2kkfahtfv44ocHzEFK1sLBaE7zdcYT2GAZ"
 client.update_ipns(ipns, new_cid)
 print("update IPNS success!")
+
+# Import an existing IPNS record by private
+client.import_ipns(
+    "YOUR_IPNS_NAME",
+    "QmRA3NWM82ZGynMbYzAgYTSXCVM14Wx1RZ8fKP42G6gjgj",
+    "YOUR_SECRET_TEXT",
+    "pem-pkcs8-cleartext",
+    1
+)
