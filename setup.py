@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='gw3',
-    version='0.5',
+    version='0.6.5',
     description='A Python client for the Gateway3 API',
     keywords=["gw3", "ipfs", "gateway3"],
     author='photon team',

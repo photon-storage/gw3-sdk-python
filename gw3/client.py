@@ -3,6 +3,7 @@ import base64
 import hmac
 import hashlib
 import time
+import json
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 
 ENDPOINT = "https://gw3.io"
@@ -160,3 +161,22 @@ class GW3Client:
             return response.json()["msg"]
         else:
             raise Exception("update_ipns API call")
+
+    def import_ipns(self, name, value, secret_key, secret_format, seq):
+        url = f"{ENDPOINT}/api/v0/name/import"
+        payload = {
+            "name": name,
+            "value": value,
+            "secret_key": secret_key,
+            "format": secret_format,
+            "seq": seq,
+        }
+
+        headers = {"Content-Type": "application/json"}
+        req = requests.Request("POST", url, data=json.dumps(payload), headers=headers)
+        response = self.send_request(req)
+
+        if response.ok:
+            return response.json()["msg"]
+        else:
+            raise Exception("import_ipns API call")
